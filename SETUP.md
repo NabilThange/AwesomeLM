@@ -38,7 +38,7 @@ The Landing page newsletter functionality requires Upstash Redis. If you want to
 ### 4. Run Development Server
 
 ```bash
-pnpm dev
+pnpm dev 
 ```
 
 The application will start at:
