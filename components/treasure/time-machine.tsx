@@ -15,6 +15,7 @@ import { ClickableCard } from "@/components/treasure/clickable-card"
 import { ImageDetailPopover } from "@/components/treasure/image-detail-popover"
 import { ImageData } from "@/types/treasure"
 import { fetchTreasures } from "@/lib/supabase-queries"
+import { useImagePreload } from "@/hooks/use-image-preload"
 
 const FRAME_OFFSET = -30
 const FRAMES_VISIBLE_LENGTH = 3
@@ -48,10 +49,10 @@ function SimpleMode({
           <CarouselContent style={{ height: "70vh" }}>
             {images.map((image, index) => (
               <CarouselItem key={index} style={{ height: "70vh" }}>
-                <div className="h-full w-full flex flex-col items-center justify-center gap-4 px-4">
+                <div className="h-full w-full flex items-center justify-center px-4">
                   <ClickableCard
                     onClick={() => onImageClick(index)}
-                    className="relative w-full aspect-[16/9] bg-black rounded-lg overflow-hidden shadow-2xl cursor-pointer flex-shrink-0"
+                    className="relative w-full aspect-[16/9] bg-black rounded-lg overflow-hidden shadow-2xl cursor-pointer"
                   >
                     <img
                       src={image.url || "/404.png"}
@@ -59,11 +60,12 @@ function SimpleMode({
                       className="object-cover w-full h-full"
                       draggable={false}
                     />
+                    {/* Text overlay at bottom of card */}
+                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/70 to-transparent p-4 text-center">
+                      <h3 className="text-white text-lg font-semibold mb-1">{image.title}</h3>
+                      <p className="text-gray-300 text-sm line-clamp-2">{image.description}</p>
+                    </div>
                   </ClickableCard>
-                  <div className="text-center space-y-2 max-w-full">
-                    <h3 className="text-white text-lg font-semibold">{image.title}</h3>
-                    <p className="text-gray-300 text-sm line-clamp-2">{image.description}</p>
-                  </div>
                 </div>
               </CarouselItem>
             ))}
@@ -144,6 +146,13 @@ export default function TimeMachine({
 
     loadTreasures()
   }, [])
+
+  // Preload first 8 images for faster initial display
+  useImagePreload(images, {
+    count: 8,
+    preset: 'medium',
+    enabled: !loading && images.length > 0
+  })
 
   const handleImageClick = (index: number) => {
     setSelectedImageIndex(index)

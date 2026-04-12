@@ -1,4 +1,5 @@
 import { Treasure, ImageData } from '@/types/treasure'
+import { optimizeSupabaseImage } from './image-optimizer'
 
 const PROJECT_ID = 'qyhtrqobtwmbymviezcs'
 const FALLBACK_IMAGE = '/404.png'
@@ -6,15 +7,36 @@ const FALLBACK_IMAGE = '/404.png'
 /**
  * Transform Supabase treasure row to ImageData format
  * Uses 404.png as fallback if main_image_url is empty
+ * Optimizes images using Supabase's transformation API
  */
 function transformToImageData(treasure: Treasure): ImageData {
+  // Optimize main image for medium display (800x600)
+  const optimizedUrl = treasure.main_image_url 
+    ? optimizeSupabaseImage(treasure.main_image_url, {
+        width: 800,
+        height: 600,
+        quality: 80,
+        resize: 'contain'
+      })
+    : FALLBACK_IMAGE
+
+  // Optimize additional images
+  const optimizedAdditionalImages = (treasure.additional_images || []).map(url =>
+    optimizeSupabaseImage(url, {
+      width: 1200,
+      height: 900,
+      quality: 85,
+      resize: 'contain'
+    })
+  )
+
   return {
     id: treasure.id,
-    url: treasure.main_image_url || FALLBACK_IMAGE,
+    url: optimizedUrl,
     description: treasure.description,
     title: treasure.title,
     prompt: treasure.prompt,
-    additionalImages: treasure.additional_images || [],
+    additionalImages: optimizedAdditionalImages,
     tags: treasure.tags || [],
     category: treasure.category
   }

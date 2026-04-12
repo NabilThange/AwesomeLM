@@ -33,7 +33,7 @@ export default function TreasurePage() {
       </div>
 
       {/* GitHub Link with Tooltip */}
-      <div className="absolute bottom-4 left-4 z-50">
+      <div className="absolute bottom-16 sm:bottom-4 left-4 z-50">
         <div className="relative">
           <a
             href="https://github.com/NabilThange/notebooklm-prompts"

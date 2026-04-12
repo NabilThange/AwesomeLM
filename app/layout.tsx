@@ -6,6 +6,7 @@ import "./globals.css"
 import { cn } from "@/lib/utils"
 import { V0Provider } from "@/lib/context"
 import dynamic from "next/dynamic"
+import { TreasurePreloader } from "@/components/treasure/treasure-preloader"
 
 const V0Setup = dynamic(() => import("@/components/v0-setup"))
 
@@ -64,6 +65,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={cn(geistSans.variable, geistMono.variable, instrumentSerif.variable, "font-sans antialiased")}>
         <V0Provider isV0={isV0}>
+          <TreasurePreloader />
           {children}
           {isV0 && <V0Setup />}
           {process.env.NODE_ENV === 'production' && <Analytics />}
