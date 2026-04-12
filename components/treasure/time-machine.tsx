@@ -54,7 +54,7 @@ function SimpleMode({
                     className="relative w-full aspect-[16/9] bg-black rounded-lg overflow-hidden shadow-2xl cursor-pointer flex-shrink-0"
                   >
                     <img
-                      src={image.url || "/placeholder.svg"}
+                      src={image.url || "/404.png"}
                       alt={image.title}
                       className="object-cover w-full h-full"
                       draggable={false}
@@ -92,7 +92,7 @@ function SimpleMode({
             >
               <div className="relative w-full aspect-[16/9] bg-black rounded-lg overflow-hidden shadow-xl hover:shadow-2xl transition-shadow">
                 <img
-                  src={image.url || "/placeholder.svg"}
+                  src={image.url || "/404.png"}
                   alt={image.title}
                   className="object-cover w-full h-full hover:scale-105 transition-transform duration-300"
                 />

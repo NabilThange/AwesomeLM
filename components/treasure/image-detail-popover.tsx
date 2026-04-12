@@ -125,7 +125,7 @@ export function ImageDetailPopover({
               <AnimatePresence mode="wait">
                 <motion.img
                   key={currentImageIndex}
-                  src={images[currentImageIndex] || "/placeholder.svg"}
+                  src={images[currentImageIndex] || "/404.png"}
                   alt={`${title} - ${currentImageIndex + 1}`}
                   className="w-full h-full object-cover"
                   initial={{ opacity: 0 }}
