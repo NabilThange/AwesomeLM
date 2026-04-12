@@ -13,50 +13,8 @@ import {
 } from "@/components/ui/carousel"
 import { ClickableCard } from "@/components/treasure/clickable-card"
 import { ImageDetailPopover } from "@/components/treasure/image-detail-popover"
-
-interface ImageData {
-  url: string
-  description: string
-  title: string
-}
-
-const IMAGES: ImageData[] = [
-  {
-    url: "https://cdn.cosmos.so/5689a5cd-92a5-4cb1-b014-263da4f55731?format=jpeg",
-    description: "A stunning sunset over mountain peaks with golden hour lighting illuminating the landscape",
-    title: "Mountain Sunset"
-  },
-  {
-    url: "https://cdn.cosmos.so/c4588488-0021-4804-9c29-a43059378bfe?format=jpeg",
-    description: "Serene lake reflection capturing the beauty of nature in perfect symmetry",
-    title: "Lake Reflection"
-  },
-  {
-    url: "https://cdn.cosmos.so/de8c561b-e4e4-48f3-9068-30d63b92c43e?format=jpeg",
-    description: "Vibrant autumn forest with colorful foliage creating a natural tapestry",
-    title: "Autumn Forest"
-  },
-  {
-    url: "https://cdn.cosmos.so/207b3ba7-13ef-496b-a9cb-2a718e14a24e?format=jpeg",
-    description: "Majestic waterfall cascading down rocky cliffs surrounded by lush greenery",
-    title: "Waterfall Vista"
-  },
-  {
-    url: "https://cdn.cosmos.so/6c41e632-d300-4516-a7af-9a1f7c0aef94?format=jpeg",
-    description: "Peaceful beach scene with crystal clear waters and pristine white sand",
-    title: "Beach Paradise"
-  },
-  {
-    url: "https://cdn.cosmos.so/e552eaac-8251-4890-b954-e988fc4bf2e0?format=jpeg",
-    description: "Dramatic mountain range with snow-capped peaks reaching into the clouds",
-    title: "Alpine Heights"
-  },
-  {
-    url: "https://cdn.cosmos.so/5689a5cd-92a5-4cb1-b014-263da4f55731?format=jpeg",
-    description: "A stunning sunset over mountain peaks with golden hour lighting illuminating the landscape",
-    title: "Mountain Sunset"
-  },
-]
+import { ImageData } from "@/types/treasure"
+import { fetchTreasures } from "@/lib/supabase-queries"
 
 const FRAME_OFFSET = -30
 const FRAMES_VISIBLE_LENGTH = 3
@@ -160,6 +118,8 @@ export default function TimeMachine({
 }) {
   // Use continuous index that can go infinite in both directions
   const [currentIndex, setCurrentIndex] = React.useState(0)
+  const [images, setImages] = React.useState<ImageData[]>([])
+  const [loading, setLoading] = React.useState(true)
   const containerRef = React.useRef<HTMLDivElement>(null)
   const scrollAccumulator = React.useRef(0)
   const lastUpdateTime = React.useRef(Date.now())
@@ -168,6 +128,22 @@ export default function TimeMachine({
   // Popover state
   const [selectedImageIndex, setSelectedImageIndex] = React.useState<number | null>(null)
   const [isPopoverOpen, setIsPopoverOpen] = React.useState(false)
+
+  // Load treasures from Supabase
+  React.useEffect(() => {
+    async function loadTreasures() {
+      try {
+        const data = await fetchTreasures()
+        setImages(data)
+      } catch (error) {
+        console.error('Failed to load treasures:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    loadTreasures()
+  }, [])
 
   const handleImageClick = (index: number) => {
     setSelectedImageIndex(index)
@@ -187,12 +163,12 @@ export default function TimeMachine({
     for (let i = start; i <= end; i++) {
       cards.push({
         index: i,
-        imageIndex: ((i % IMAGES.length) + IMAGES.length) % IMAGES.length, // Positive modulo
+        imageIndex: ((i % images.length) + images.length) % images.length, // Positive modulo
       })
     }
 
     return cards
-  }, [currentIndex])
+  }, [currentIndex, images.length])
 
   React.useEffect(() => {
     // Don't attach event listeners in simple mode
@@ -272,18 +248,40 @@ export default function TimeMachine({
 
   const visibleCards = getVisibleCards()
 
+  // Show loading state
+  if (loading) {
+    return (
+      <div className="w-full h-full flex items-center justify-center">
+        <div className="text-white text-xl">Loading treasures...</div>
+      </div>
+    )
+  }
+
+  // Show empty state
+  if (images.length === 0) {
+    return (
+      <div className="w-full h-full flex items-center justify-center">
+        <div className="text-white text-xl">No treasures found</div>
+      </div>
+    )
+  }
+
   // Simple Mode rendering
   if (simpleMode) {
     return (
       <>
-        <SimpleMode images={IMAGES} onImageClick={handleImageClick} />
+        <SimpleMode images={images} onImageClick={handleImageClick} />
         {selectedImageIndex !== null && (
           <ImageDetailPopover
             isOpen={isPopoverOpen}
             onClose={handleClosePopover}
-            imageUrl={IMAGES[selectedImageIndex].url}
-            title={IMAGES[selectedImageIndex].title}
-            description={IMAGES[selectedImageIndex].description}
+            images={[
+              images[selectedImageIndex].url,
+              ...images[selectedImageIndex].additionalImages
+            ]}
+            title={images[selectedImageIndex].title}
+            description={images[selectedImageIndex].description}
+            prompt={images[selectedImageIndex].prompt}
           />
         )}
       </>
@@ -301,54 +299,58 @@ export default function TimeMachine({
             const scale = clamp(1 - offsetIndex * 0.08, [0.08, 2])
             const y = clamp(offsetIndex * FRAME_OFFSET, [FRAME_OFFSET * FRAMES_VISIBLE_LENGTH, Number.POSITIVE_INFINITY])
 
-            const imageData = IMAGES[card.imageIndex]
+            const imageData = images[card.imageIndex]
             const image = <img alt={imageData.title} src={imageData.url || "/placeholder.svg"} className="object-cover w-full h-full" />
 
             return (
-              <ClickableCard
+              <motion.div
                 key={card.index}
+                className="absolute w-[85%] max-w-[800px] aspect-[16/9] bg-black rounded-lg overflow-hidden shadow-2xl cursor-pointer"
+                initial={false}
+                animate={{
+                  y,
+                  scale,
+                  transition: {
+                    type: "spring",
+                    stiffness: 250,
+                    damping: 20,
+                    mass: 0.5,
+                  },
+                }}
+                style={{
+                  willChange: "opacity, filter, transform",
+                  filter: `blur(${blur}px)`,
+                  opacity,
+                  transitionProperty: "opacity, filter",
+                  transitionDuration: "200ms",
+                  transitionTimingFunction: "ease-in-out",
+                  zIndex: 1000 - card.index,
+                  pointerEvents: offsetIndex === 0 ? "auto" : "none",
+                }}
                 onClick={() => handleImageClick(card.imageIndex)}
-                className="absolute inset-0 flex items-center justify-center"
               >
-                <motion.div
-                  className="w-[85%] max-w-[800px] cursor-pointer"
-                  initial={false}
-                  animate={{
-                    y,
-                    scale,
-                    transition: {
-                      type: "spring",
-                      stiffness: 250,
-                      damping: 20,
-                      mass: 0.5,
-                    },
-                  }}
-                  style={{
-                    willChange: "opacity, filter, transform",
-                    filter: `blur(${blur}px)`,
-                    opacity,
-                    transitionProperty: "opacity, filter",
-                    transitionDuration: "200ms",
-                    transitionTimingFunction: "ease-in-out",
-                    zIndex: 1000 - card.index,
-                  }}
-                >
-                  <div className="aspect-[16/9] bg-black rounded-lg overflow-hidden shadow-2xl">
-                    {shouldImplementPreloading ? <>{offsetIndex < FRAMES_VISIBLE_LENGTH ? image : null}</> : image}
-                  </div>
-                  {offsetIndex === 0 && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.2 }}
-                      className="mt-4 text-center space-y-2 px-4"
-                    >
-                      <h3 className="text-white text-xl font-semibold">{imageData.title}</h3>
-                      <p className="text-gray-300 text-sm max-w-2xl mx-auto">{imageData.description}</p>
-                    </motion.div>
-                  )}
-                </motion.div>
-              </ClickableCard>
+                {shouldImplementPreloading ? <>{offsetIndex < FRAMES_VISIBLE_LENGTH ? image : null}</> : image}
+              </motion.div>
+            )
+          })}
+          {visibleCards.map((card) => {
+            const offsetIndex = card.index - currentIndex
+            if (offsetIndex !== 0) return null
+            
+            const imageData = images[card.imageIndex]
+            
+            return (
+              <motion.div
+                key={`text-${card.index}`}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 }}
+                className="absolute bottom-20 left-0 right-0 text-center space-y-2 px-4 max-w-2xl mx-auto pointer-events-none"
+                style={{ zIndex: 2000 }}
+              >
+                <h3 className="text-white text-xl font-semibold">{imageData.title}</h3>
+                <p className="text-gray-300 text-sm">{imageData.description}</p>
+              </motion.div>
             )
           })}
         </div>
@@ -357,9 +359,13 @@ export default function TimeMachine({
         <ImageDetailPopover
           isOpen={isPopoverOpen}
           onClose={handleClosePopover}
-          imageUrl={IMAGES[selectedImageIndex].url}
-          title={IMAGES[selectedImageIndex].title}
-          description={IMAGES[selectedImageIndex].description}
+          images={[
+            images[selectedImageIndex].url,
+            ...images[selectedImageIndex].additionalImages
+          ]}
+          title={images[selectedImageIndex].title}
+          description={images[selectedImageIndex].description}
+          prompt={images[selectedImageIndex].prompt}
         />
       )}
     </>
