@@ -235,7 +235,7 @@ export default function TimeMachine({
       container.removeEventListener("touchstart", handleTouchStart)
       container.removeEventListener("touchmove", handleTouchMove)
     }
-  }, [simpleMode])
+  }, [simpleMode, images.length]) // Added images.length to ensure it runs after data loads
 
   useShortcuts({
     ArrowRight: () => {
