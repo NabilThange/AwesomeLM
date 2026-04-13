@@ -123,6 +123,7 @@ export default function TimeMachine({
   const [currentIndex, setCurrentIndex] = React.useState(0)
   const [images, setImages] = React.useState<ImageData[]>([])
   const [loading, setLoading] = React.useState(true)
+  const isMobile = useIsMobile()
   const containerRef = React.useRef<HTMLDivElement>(null)
   const scrollAccumulator = React.useRef(0)
   const lastUpdateTime = React.useRef(Date.now())
@@ -306,8 +307,10 @@ export default function TimeMachine({
             const offsetIndex = card.index - currentIndex
             const blur = currentIndex > card.index ? 2 : 0
             const opacity = currentIndex > card.index ? 0 : 1
-            const scale = clamp(1 - offsetIndex * 0.08, [0.08, 2])
-            const y = clamp(offsetIndex * FRAME_OFFSET, [FRAME_OFFSET * FRAMES_VISIBLE_LENGTH, Number.POSITIVE_INFINITY])
+            const frameOffset = isMobile ? -15 : FRAME_OFFSET
+            const scaleMultiplier = isMobile ? 0.04 : 0.08
+            const scale = clamp(1 - offsetIndex * scaleMultiplier, [0.08, 2])
+            const y = clamp(offsetIndex * frameOffset, [frameOffset * FRAMES_VISIBLE_LENGTH, Number.POSITIVE_INFINITY])
 
             const imageData = images[card.imageIndex]
             const image = <img alt={imageData.title} src={imageData.url || "/placeholder.svg"} className="object-cover w-full h-full" />
@@ -315,7 +318,7 @@ export default function TimeMachine({
             return (
               <motion.div
                 key={card.index}
-                className="absolute w-[85%] max-w-[800px] cursor-pointer"
+                className="absolute w-[95%] md:w-[85%] max-w-[800px] aspect-[16/9] bg-black rounded-lg overflow-hidden shadow-2xl cursor-pointer"
                 initial={false}
                 animate={{
                   y,
@@ -339,20 +342,13 @@ export default function TimeMachine({
                 }}
                 onClick={() => handleImageClick(card.imageIndex)}
               >
-                <div className="w-full aspect-[16/9] bg-black rounded-lg overflow-hidden shadow-2xl">
-                  {shouldImplementPreloading ? <>{offsetIndex < FRAMES_VISIBLE_LENGTH ? image : null}</> : image}
-                </div>
+                {shouldImplementPreloading ? <>{offsetIndex < FRAMES_VISIBLE_LENGTH ? image : null}</> : image}
+                {/* Text overlay - only show on front card */}
                 {offsetIndex === 0 && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.2 }}
-                    className="text-center space-y-2 px-4"
-                    style={{ marginTop: "30px" }}
-                  >
-                    <h3 className="text-white text-xl font-semibold">{imageData.title}</h3>
-                    <p className="text-gray-300 text-sm">{imageData.description}</p>
-                  </motion.div>
+                  <div className="absolute inset-0 flex flex-col items-center justify-end bg-gradient-to-t from-black/90 via-black/50 to-transparent p-4 pb-6 md:pb-8 text-center pointer-events-none">
+                    <h3 className="text-white text-base md:text-xl font-semibold mb-1 md:mb-2">{imageData.title}</h3>
+                    <p className="text-gray-300 text-xs md:text-sm line-clamp-2">{imageData.description}</p>
+                  </div>
                 )}
               </motion.div>
             )
