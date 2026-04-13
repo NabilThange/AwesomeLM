@@ -30,29 +30,71 @@ const instrumentSerif = Instrument_Serif({
 const isV0 = process.env["VERCEL_URL"]?.includes("vusercontent.net") ?? false
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://trove.app'),
   title: {
     template: "%s | Trove",
     default: "Trove - Power Your Point",
   },
   description:
     "Ideas die on blank slides. Trove transforms brilliant thoughts into brilliant slides instantly. Skip the blank slide and speak in visuals with curated prompts that power your presentations.",
+  keywords: [
+    "presentations",
+    "slides",
+    "powerpoint",
+    "visual communication",
+    "presentation design",
+    "slide templates",
+    "presentation prompts",
+    "trove",
+  ],
+  authors: [{ name: "Trove" }],
+  creator: "Trove",
+  publisher: "Trove",
   generator: 'v0.app',
   icons: {
     icon: [
       {
-        url: '/icon-light-32x32.png',
-        media: '(prefers-color-scheme: light)',
-      },
-      {
-        url: '/icon-dark-32x32.png',
-        media: '(prefers-color-scheme: dark)',
-      },
-      {
-        url: '/icon.svg',
+        url: '/logo.svg',
         type: 'image/svg+xml',
       },
     ],
     apple: '/apple-icon.png',
+  },
+  openGraph: {
+    type: 'website',
+    locale: 'en_US',
+    url: '/',
+    siteName: 'Trove',
+    title: 'Trove - Power Your Point',
+    description:
+      'Ideas die on blank slides. Trove transforms brilliant thoughts into brilliant slides instantly. Skip the blank slide and speak in visuals with curated prompts that power your presentations.',
+    images: [
+      {
+        url: '/home.png',
+        width: 1200,
+        height: 630,
+        alt: 'Trove - Power Your Point',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Trove - Power Your Point',
+    description:
+      'Ideas die on blank slides. Trove transforms brilliant thoughts into brilliant slides instantly.',
+    images: ['/home.png'],
+    creator: '@trove',
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
   },
 }
 
