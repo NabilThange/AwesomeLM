@@ -60,8 +60,8 @@ function SimpleMode({
                       className="object-cover w-full h-full"
                       draggable={false}
                     />
-                    {/* Text overlay moved up from bottom */}
-                    <div className="absolute bottom-12 left-0 right-0 bg-gradient-to-t from-black/90 via-black/70 to-transparent p-4 pb-6 text-center">
+                    {/* Text overlay positioned higher for better mobile visibility */}
+                    <div className="absolute bottom-20 left-0 right-0 bg-gradient-to-t from-black/90 via-black/70 to-transparent p-4 pb-6 text-center">
                       <h3 className="text-white text-lg font-semibold mb-1">{image.title}</h3>
                       <p className="text-gray-300 text-sm line-clamp-2">{image.description}</p>
                     </div>
