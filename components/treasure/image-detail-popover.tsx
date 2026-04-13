@@ -46,6 +46,15 @@ export function ImageDetailPopover({
     }
   }
 
+  const handleOpenNotebookLM = async () => {
+    try {
+      await navigator.clipboard.writeText(prompt || description)
+      window.open("https://notebooklm.google.com", "_blank")
+    } catch (err) {
+      console.error("Failed to copy or open NotebookLM:", err)
+    }
+  }
+
   const handlePrevImage = () => {
     setCurrentImageIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1))
   }
@@ -227,24 +236,39 @@ export function ImageDetailPopover({
                   <label className="text-sm font-semibold text-gray-900 dark:text-white">
                     Prompt
                   </label>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={handleCopyPrompt}
-                    className="h-7 gap-1.5"
-                  >
-                    {copiedPrompt ? (
-                      <>
-                        <Check className="h-3 w-3 text-green-600" />
-                        <span className="text-xs">Copied</span>
-                      </>
-                    ) : (
-                      <>
-                        <Copy className="h-3 w-3" />
-                        <span className="text-xs hidden sm:inline">Copy</span>
-                      </>
-                    )}
-                  </Button>
+                  <div className="flex items-center gap-2">
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={handleOpenNotebookLM}
+                      className="h-7 w-7 rounded-full p-0 hover:bg-neutral-200 dark:hover:bg-neutral-800"
+                      title="Copy prompt and open NotebookLM"
+                    >
+                      <img
+                        src="/notebooklm.webp"
+                        alt="NotebookLM"
+                        className="h-4 w-4 object-contain"
+                      />
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={handleCopyPrompt}
+                      className="h-7 gap-1.5"
+                    >
+                      {copiedPrompt ? (
+                        <>
+                          <Check className="h-3 w-3 text-green-600" />
+                          <span className="text-xs">Copied</span>
+                        </>
+                      ) : (
+                        <>
+                          <Copy className="h-3 w-3" />
+                          <span className="text-xs hidden sm:inline">Copy</span>
+                        </>
+                      )}
+                    </Button>
+                  </div>
                 </div>
                 <textarea
                   readOnly

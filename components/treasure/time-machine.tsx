@@ -60,8 +60,8 @@ function SimpleMode({
                       className="object-cover w-full h-full"
                       draggable={false}
                     />
-                    {/* Text overlay positioned higher for better mobile visibility */}
-                    <div className="absolute bottom-20 left-0 right-0 bg-gradient-to-t from-black/90 via-black/70 to-transparent p-4 pb-6 text-center">
+                    {/* Text overlay positioned for mobile visibility */}
+                    <div className="absolute inset-0 flex flex-col items-center justify-end bg-gradient-to-t from-black/90 via-black/50 to-transparent p-4 pb-4 text-center">
                       <h3 className="text-white text-lg font-semibold mb-1">{image.title}</h3>
                       <p className="text-gray-300 text-sm line-clamp-2">{image.description}</p>
                     </div>
@@ -90,17 +90,18 @@ function SimpleMode({
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1 }}
-              className="flex flex-col gap-3 cursor-pointer"
+              className="flex flex-col cursor-pointer h-full"
+              style={{ gap: "30px" }}
             >
-              <div className="relative w-full aspect-[16/9] bg-black rounded-lg overflow-hidden shadow-xl hover:shadow-2xl transition-shadow">
+              <div className="relative w-full aspect-[16/9] bg-black rounded-lg overflow-hidden shadow-xl hover:shadow-2xl transition-shadow flex-shrink-0">
                 <img
                   src={image.url || "/404.png"}
                   alt={image.title}
                   className="object-cover w-full h-full hover:scale-105 transition-transform duration-300"
                 />
               </div>
-              <div className="space-y-1">
-                <h3 className="text-white text-base font-semibold">{image.title}</h3>
+              <div className="space-y-1 flex-1 flex flex-col justify-start">
+                <h3 className="text-white text-base font-semibold line-clamp-2">{image.title}</h3>
                 <p className="text-gray-400 text-sm line-clamp-2">{image.description}</p>
               </div>
             </motion.div>
@@ -314,7 +315,7 @@ export default function TimeMachine({
             return (
               <motion.div
                 key={card.index}
-                className="absolute w-[85%] max-w-[800px] aspect-[16/9] bg-black rounded-lg overflow-hidden shadow-2xl cursor-pointer"
+                className="absolute w-[85%] max-w-[800px] cursor-pointer"
                 initial={false}
                 animate={{
                   y,
@@ -338,27 +339,21 @@ export default function TimeMachine({
                 }}
                 onClick={() => handleImageClick(card.imageIndex)}
               >
-                {shouldImplementPreloading ? <>{offsetIndex < FRAMES_VISIBLE_LENGTH ? image : null}</> : image}
-              </motion.div>
-            )
-          })}
-          {visibleCards.map((card) => {
-            const offsetIndex = card.index - currentIndex
-            if (offsetIndex !== 0) return null
-            
-            const imageData = images[card.imageIndex]
-            
-            return (
-              <motion.div
-                key={`text-${card.index}`}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2 }}
-                className="absolute bottom-20 left-0 right-0 text-center space-y-2 px-4 max-w-2xl mx-auto pointer-events-none"
-                style={{ zIndex: 2000 }}
-              >
-                <h3 className="text-white text-xl font-semibold">{imageData.title}</h3>
-                <p className="text-gray-300 text-sm">{imageData.description}</p>
+                <div className="w-full aspect-[16/9] bg-black rounded-lg overflow-hidden shadow-2xl">
+                  {shouldImplementPreloading ? <>{offsetIndex < FRAMES_VISIBLE_LENGTH ? image : null}</> : image}
+                </div>
+                {offsetIndex === 0 && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.2 }}
+                    className="text-center space-y-2 px-4"
+                    style={{ marginTop: "30px" }}
+                  >
+                    <h3 className="text-white text-xl font-semibold">{imageData.title}</h3>
+                    <p className="text-gray-300 text-sm">{imageData.description}</p>
+                  </motion.div>
+                )}
               </motion.div>
             )
           })}
