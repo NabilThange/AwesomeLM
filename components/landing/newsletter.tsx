@@ -52,7 +52,7 @@ export const Newsletter = () => {
         transition={{ duration: DURATION, ease: EASE_OUT }}
       >
         <h1 className="font-serif text-5xl italic short:lg:text-8xl sm:text-8xl lg:text-9xl text-foreground">
-          Trove.✦ ݁˖
+          AwesomeLM.✦ ݁˖
         </h1>
       </motion.div>
 
@@ -152,7 +152,7 @@ export const Newsletter = () => {
               className="relative flex min-h-0 flex-shrink overflow-hidden text-sm md:text-base max-h-[calc(70dvh-var(--footer-safe-area))] flex-col gap-8 text-center backdrop-blur-xl text-balance border-2 border-border/50 bg-primary/20 max-w-3xl text-foreground rounded-3xl ring-1 ring-offset-primary/10 ring-border/10 ring-offset-2 shadow-button"
             >
               <article className="relative overflow-y-auto italic p-6 h-full [&_p]:my-4">
-                <h2 className="text-2xl font-bold not-italic mb-6">The Trove Manifesto</h2>
+                <h2 className="text-2xl font-bold not-italic mb-6">The AwesomeLM Manifesto</h2>
                 <p>
                   Ideas die on blank slides.
                 </p>
@@ -163,7 +163,7 @@ export const Newsletter = () => {
                   We call BS.
                 </p>
                 <p>
-                  Your ideas are already good; they just need the right spark. We built Trove because we believe the distance between a brilliant thought and a brilliant slide should be zero.
+                  Your ideas are already good; they just need the right spark. We built AwesomeLM because we believe the distance between a brilliant thought and a brilliant slide should be zero.
                 </p>
                 <p>
                   We don&apos;t do templates. Templates box you in. We do prompts—the raw material, the architectural blueprints, the exact instructions you need to generate visuals that actually say something.

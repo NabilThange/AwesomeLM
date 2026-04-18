@@ -30,13 +30,13 @@ const instrumentSerif = Instrument_Serif({
 const isV0 = process.env["VERCEL_URL"]?.includes("vusercontent.net") ?? false
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://trove.app'),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://awesomelm.app'),
   title: {
-    template: "%s | Trove",
-    default: "Trove - Power Your Point",
+    template: "%s | AwesomeLM",
+    default: "AwesomeLM - Power Your Point",
   },
   description:
-    "Ideas die on blank slides. Trove transforms brilliant thoughts into brilliant slides instantly. Skip the blank slide and speak in visuals with curated prompts that power your presentations.",
+    "Ideas die on blank slides. AwesomeLM transforms brilliant thoughts into brilliant slides instantly. Skip the blank slide and speak in visuals with curated prompts that power your presentations.",
   keywords: [
     "presentations",
     "slides",
@@ -45,11 +45,11 @@ export const metadata: Metadata = {
     "presentation design",
     "slide templates",
     "presentation prompts",
-    "trove",
+    "awesomelm",
   ],
-  authors: [{ name: "Trove" }],
-  creator: "Trove",
-  publisher: "Trove",
+  authors: [{ name: "AwesomeLM" }],
+  creator: "AwesomeLM",
+  publisher: "AwesomeLM",
   generator: 'v0.app',
   icons: {
     icon: [
@@ -64,26 +64,26 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'en_US',
     url: '/',
-    siteName: 'Trove',
-    title: 'Trove - Power Your Point',
+    siteName: 'AwesomeLM',
+    title: 'AwesomeLM - Power Your Point',
     description:
-      'Ideas die on blank slides. Trove transforms brilliant thoughts into brilliant slides instantly. Skip the blank slide and speak in visuals with curated prompts that power your presentations.',
+      'Ideas die on blank slides. AwesomeLM transforms brilliant thoughts into brilliant slides instantly. Skip the blank slide and speak in visuals with curated prompts that power your presentations.',
     images: [
       {
         url: '/og-image.jpg',
         width: 1200,
         height: 630,
-        alt: 'Trove - Power Your Point',
+        alt: 'AwesomeLM - Power Your Point',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Trove - Power Your Point',
+    title: 'AwesomeLM - Power Your Point',
     description:
-      'Ideas die on blank slides. Trove transforms brilliant thoughts into brilliant slides instantly.',
+      'Ideas die on blank slides. AwesomeLM transforms brilliant thoughts into brilliant slides instantly.',
     images: ['/og-image.jpg'],
-    creator: '@trove',
+    creator: '@awesomelm',
   },
   robots: {
     index: true,

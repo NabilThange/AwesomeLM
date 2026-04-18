@@ -1,4 +1,4 @@
-# Setup Guide for Unified Trove Application
+# Setup Guide for Unified AwesomeLM Application
 
 ## Quick Start
 
