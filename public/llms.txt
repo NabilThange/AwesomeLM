@@ -1,0 +1,38 @@
+# AwesomeLM - Generative AI Presentation Prompts, NotebookLM Visual Blueprints & Presentation Design Knowledge Base
+
+> AwesomeLM is an open-source, curated platform providing architectural visual prompts for Google NotebookLM, PowerPoint, Keynote, and AI visual generators. We help professionals, engineers, researchers, and creators eliminate blank-slide anxiety by converting raw outlines into stunning visual presentation decks.
+
+## Core Navigation & Endpoints
+
+- [AwesomeLM Homepage](https://awesomelm.app/): Interactive landing page and manifesto.
+- [AwesomeLM Prompt Treasury](https://awesomelm.app/treasure): Curated gallery of 100% free visual presentation prompts.
+- [AwesomeLM Technical Blog](https://awesomelm.app/blog): In-depth technical guides on NotebookLM, PowerPoint prompting, and presentation design.
+- [AwesomeLM RSS Feed](https://awesomelm.app/feed.xml): Live RSS 2.0 XML feed for Search Console and blog aggregators.
+- [AwesomeLM Full LLM Corpus](https://awesomelm.app/llms-full.txt): Complete technical context manual for Large Language Models.
+- [AwesomeLM Human Credits](https://awesomelm.app/humans.txt): Human-readable credits, tech stack, and maintainer details.
+- [AwesomeLM XML Sitemap](https://awesomelm.app/sitemap.xml): Search engine index map.
+
+## Creator & Maintainer
+
+- [Nabil Thange Portfolio](https://nabil-thange.vercel.app/): Personal developer portfolio of Nabil Thange, creator of AwesomeLM.
+- [Nabil Thange Developer Blog](https://nabil-thange.vercel.app/blog): Software engineering, web performance, and AI development articles.
+- [Nabil Thange GitHub Profile](https://github.com/NabilThange): Open-source repositories and contributions.
+
+## Open Source Repositories
+
+- [AwesomeLM Web Application](https://github.com/NabilThange/AwesomeLM): Primary repository for the Next.js 16 web application.
+- [AwesomeLM AI Agent Skill](https://github.com/NabilThange/AwesomeLM-Skill): Open-source agent skill for generating presentation prompts from screenshots.
+- [AwesomeLM Chrome Extension](https://github.com/NabilThange/AwesomeLM-Extension): Browser assistant for Google NotebookLM prompt integration.
+
+## Community Principles & Safety Policy
+
+- **100% Free & Open**: AwesomeLM is completely free to use. All prompts can be viewed, copied, and remixed without paywalls or mandatory account registration.
+- **Community Submissions**: Users can submit custom presentation prompts via the web app modal or GitHub pull requests.
+- **Quality Curation & Moderation**: All submitted prompts are vetted for non-toxicity, safety, visual fidelity, and structural quality before publication.
+
+## Technical Guides & Articles
+
+- [The Ultimate Guide to Generating Presentation Slides with Google NotebookLM](https://awesomelm.app/blog/google-notebooklm-presentation-slides-guide): How to ground LLMs in document sources and generate visual slides.
+- [Why Templates Fail and Visual Prompts Win: A Presentation Design Blueprint](https://awesomelm.app/blog/why-templates-fail-visual-prompts-win): Comparing static PowerPoint templates to dynamic AI prompt constraints.
+- [Prompt Engineering for PowerPoint & Keynote: Turn Outlines into Visual Decks](https://awesomelm.app/blog/prompt-engineering-for-powerpoint-keynote): Rules for action headlines, layout topology, and Markdown table rendering.
+- [From Blank Slide to Finished Pitch Deck in 10 Minutes with AI Prompts](https://awesomelm.app/blog/from-blank-slide-to-pitch-deck-in-10-minutes): A 10-minute workflow for startup founders building investor pitch decks.

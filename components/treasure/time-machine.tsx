@@ -4,15 +4,9 @@ import React from "react"
 import { motion } from "framer-motion"
 import { useShortcuts, clamp } from "@/hooks/use-shortcut"
 import { useIsMobile } from "@/hooks/use-mobile"
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel"
 import { ClickableCard } from "@/components/treasure/clickable-card"
 import { ImageDetailPopover } from "@/components/treasure/image-detail-popover"
+import { SubmitPromptModal } from "@/components/treasure/submit-prompt-modal"
 import { ImageData } from "@/types/treasure"
 import { fetchTreasures } from "@/lib/supabase-queries"
 import { useImagePreload } from "@/hooks/use-image-preload"
@@ -30,79 +24,56 @@ function SimpleMode({
   images: ImageData[]
   onImageClick: (index: number) => void
 }) {
-  const isMobile = useIsMobile()
-
-  // Mobile: Vertical Carousel (single card view) - swipeable
-  if (isMobile) {
-    return (
-      <div className="w-full h-full flex items-center justify-center bg-black p-4">
-        <Carousel
-          orientation="vertical"
-          className="w-full max-w-md"
-          opts={{
-            align: "center",
-            loop: true,
-            skipSnaps: false,
-            dragFree: false,
-          }}
-        >
-          <CarouselContent style={{ height: "70vh" }}>
-            {images.map((image, index) => (
-              <CarouselItem key={index} style={{ height: "70vh" }}>
-                <div className="h-full w-full flex items-center justify-center px-4">
-                  <ClickableCard
-                    onClick={() => onImageClick(index)}
-                    className="relative w-full aspect-[16/9] bg-black rounded-lg overflow-hidden shadow-2xl cursor-pointer"
-                  >
-                    <img
-                      src={image.url || "/404.png"}
-                      alt={image.title}
-                      className="object-cover w-full h-full"
-                      draggable={false}
-                    />
-                    {/* Text overlay positioned for mobile visibility */}
-                    <div className="absolute inset-0 flex flex-col items-center justify-end bg-gradient-to-t from-black/90 via-black/50 to-transparent p-4 pb-4 text-center">
-                      <h3 className="text-white text-lg font-semibold mb-1">{image.title}</h3>
-                      <p className="text-gray-300 text-sm line-clamp-2">{image.description}</p>
-                    </div>
-                  </ClickableCard>
-                </div>
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-          <CarouselPrevious className="absolute top-2 left-1/2 -translate-x-1/2 bg-white/90 hover:bg-white z-10" />
-          <CarouselNext className="absolute bottom-2 left-1/2 -translate-x-1/2 bg-white/90 hover:bg-white z-10" />
-        </Carousel>
-      </div>
-    )
-  }
-
-  // Desktop: Grid Layout
   return (
-    <div className="w-full h-full overflow-y-auto p-8">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
+    <div className="w-full h-full overflow-y-auto pt-12 md:pt-16 px-4 md:px-8 pb-20 md:pb-12">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 max-w-7xl mx-auto">
         {images.map((image, index) => (
           <ClickableCard
             key={index}
             onClick={() => onImageClick(index)}
+            className="h-full"
           >
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1 }}
-              className="flex flex-col cursor-pointer h-full"
-              style={{ gap: "30px" }}
+              transition={{ delay: Math.min(index * 0.04, 0.4) }}
+              className="flex flex-col h-full bg-zinc-900/80 hover:bg-zinc-900 border border-zinc-800/80 hover:border-zinc-700 rounded-xl p-4 shadow-sm hover:shadow-md transition-all duration-200 cursor-pointer overflow-hidden group"
             >
-              <div className="relative w-full aspect-[16/9] bg-black rounded-lg overflow-hidden shadow-xl hover:shadow-2xl transition-shadow flex-shrink-0">
+              {/* Image Container */}
+              <div className="relative w-full aspect-[16/9] bg-black/40 rounded-lg overflow-hidden flex-shrink-0">
                 <img
                   src={image.url || "/404.png"}
                   alt={image.title}
-                  className="object-cover w-full h-full hover:scale-105 transition-transform duration-300"
+                  className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300"
                 />
               </div>
-              <div className="space-y-1 flex-1 flex flex-col justify-start">
-                <h3 className="text-white text-base font-semibold line-clamp-2">{image.title}</h3>
-                <p className="text-gray-400 text-sm line-clamp-2">{image.description}</p>
+
+              {/* Content Group (Title + Description + Author) */}
+              <div className="mt-3 flex flex-col gap-1 flex-1 justify-start">
+                <h3 className="text-white text-base font-semibold line-clamp-2 group-hover:text-zinc-100 transition-colors">
+                  {image.title}
+                </h3>
+                <p className="text-zinc-400 text-sm line-clamp-2 leading-relaxed">
+                  {image.description}
+                </p>
+                <div className="mt-2 pt-2 border-t border-zinc-800/60 flex items-center justify-between text-xs text-zinc-400">
+                  <span>
+                    By{" "}
+                    {image.author_link ? (
+                      <a
+                        href={image.author_link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={(e) => e.stopPropagation()}
+                        className="text-zinc-300 font-medium hover:text-white underline inline-flex items-center gap-0.5"
+                      >
+                        {image.author_name || "Nabil"}
+                      </a>
+                    ) : (
+                      <strong className="text-zinc-300 font-medium">{image.author_name || "Nabil"}</strong>
+                    )}
+                  </span>
+                </div>
               </div>
             </motion.div>
           </ClickableCard>
@@ -115,9 +86,13 @@ function SimpleMode({
 export default function TimeMachine({
   shouldImplementPreloading = false,
   simpleMode = false,
+  isSubmitOpen = false,
+  onCloseSubmit,
 }: {
   shouldImplementPreloading?: boolean
   simpleMode?: boolean
+  isSubmitOpen?: boolean
+  onCloseSubmit?: () => void
 }) {
   // Use continuous index that can go infinite in both directions
   const [currentIndex, setCurrentIndex] = React.useState(0)
@@ -134,20 +109,20 @@ export default function TimeMachine({
   const [isPopoverOpen, setIsPopoverOpen] = React.useState(false)
 
   // Load treasures from Supabase
-  React.useEffect(() => {
-    async function loadTreasures() {
-      try {
-        const data = await fetchTreasures()
-        setImages(data)
-      } catch (error) {
-        console.error('Failed to load treasures:', error)
-      } finally {
-        setLoading(false)
-      }
+  const loadTreasures = React.useCallback(async () => {
+    try {
+      const data = await fetchTreasures()
+      setImages(data)
+    } catch (error) {
+      console.error('Failed to load treasures:', error)
+    } finally {
+      setLoading(false)
     }
-
-    loadTreasures()
   }, [])
+
+  React.useEffect(() => {
+    loadTreasures()
+  }, [loadTreasures])
 
   // Preload first 8 images for faster initial display
   useImagePreload(images, {
@@ -277,97 +252,100 @@ export default function TimeMachine({
     )
   }
 
-  // Simple Mode rendering
-  if (simpleMode) {
-    return (
-      <>
-        <SimpleMode images={images} onImageClick={handleImageClick} />
-        {selectedImageIndex !== null && (
-          <ImageDetailPopover
-            isOpen={isPopoverOpen}
-            onClose={handleClosePopover}
-            images={[
-              images[selectedImageIndex].url,
-              ...images[selectedImageIndex].additionalImages
-            ]}
-            title={images[selectedImageIndex].title}
-            description={images[selectedImageIndex].description}
-            prompt={images[selectedImageIndex].prompt}
-          />
-        )}
-      </>
-    )
+  const handleModalClose = () => {
+    if (onCloseSubmit) onCloseSubmit()
   }
+
+  const handleModalSuccess = () => {
+    loadTreasures()
+  }
+
+  const activeSelected = selectedImageIndex !== null ? images[selectedImageIndex] : null
 
   return (
     <>
-      <div ref={containerRef} className="relative w-full h-full flex items-center justify-center overflow-hidden">
-        <div className="relative w-full h-full flex items-center justify-center">
-          {visibleCards.map((card) => {
-            const offsetIndex = card.index - currentIndex
-            const blur = currentIndex > card.index ? 2 : 0
-            const opacity = currentIndex > card.index ? 0 : 1
-            const frameOffset = isMobile ? -15 : FRAME_OFFSET
-            const scaleMultiplier = isMobile ? 0.04 : 0.08
-            const scale = clamp(1 - offsetIndex * scaleMultiplier, [0.08, 2])
-            const y = clamp(offsetIndex * frameOffset, [frameOffset * FRAMES_VISIBLE_LENGTH, Number.POSITIVE_INFINITY])
+      {simpleMode ? (
+        <SimpleMode images={images} onImageClick={handleImageClick} />
+      ) : (
+        <div ref={containerRef} className="relative w-full h-full flex items-center justify-center overflow-hidden">
+          <div className="relative w-full h-full flex items-center justify-center">
+            {visibleCards.map((card) => {
+              const offsetIndex = card.index - currentIndex
+              const blur = currentIndex > card.index ? 2 : 0
+              const opacity = currentIndex > card.index ? 0 : 1
+              const frameOffset = isMobile ? -15 : FRAME_OFFSET
+              const scaleMultiplier = isMobile ? 0.04 : 0.08
+              const scale = clamp(1 - offsetIndex * scaleMultiplier, [0.08, 2])
+              const y = clamp(offsetIndex * frameOffset, [frameOffset * FRAMES_VISIBLE_LENGTH, Number.POSITIVE_INFINITY])
 
-            const imageData = images[card.imageIndex]
-            const image = <img alt={imageData.title} src={imageData.url || "/placeholder.svg"} className="object-cover w-full h-full" />
+              const imageData = images[card.imageIndex]
+              const image = <img alt={imageData.title} src={imageData.url || "/placeholder.svg"} className="object-cover w-full h-full" />
 
-            return (
-              <motion.div
-                key={card.index}
-                className="absolute w-[95%] md:w-[85%] max-w-[800px] aspect-[16/9] bg-black rounded-lg overflow-hidden shadow-2xl cursor-pointer"
-                initial={false}
-                animate={{
-                  y,
-                  scale,
-                  transition: {
-                    type: "spring",
-                    stiffness: 250,
-                    damping: 20,
-                    mass: 0.5,
-                  },
-                }}
-                style={{
-                  willChange: "opacity, filter, transform",
-                  filter: `blur(${blur}px)`,
-                  opacity,
-                  transitionProperty: "opacity, filter",
-                  transitionDuration: "200ms",
-                  transitionTimingFunction: "ease-in-out",
-                  zIndex: 1000 - card.index,
-                  pointerEvents: offsetIndex === 0 ? "auto" : "none",
-                }}
-                onClick={() => handleImageClick(card.imageIndex)}
-              >
-                {shouldImplementPreloading ? <>{offsetIndex < FRAMES_VISIBLE_LENGTH ? image : null}</> : image}
-                {/* Text overlay - only show on front card */}
-                {offsetIndex === 0 && (
-                  <div className="absolute inset-0 flex flex-col items-center justify-end bg-gradient-to-t from-black/90 via-black/50 to-transparent p-4 pb-6 md:pb-8 text-center pointer-events-none">
-                    <h3 className="text-white text-base md:text-xl font-semibold mb-1 md:mb-2">{imageData.title}</h3>
-                    <p className="text-gray-300 text-xs md:text-sm line-clamp-2">{imageData.description}</p>
-                  </div>
-                )}
-              </motion.div>
-            )
-          })}
+              return (
+                <motion.div
+                  key={card.index}
+                  className="absolute w-[95%] md:w-[85%] max-w-[800px] aspect-[16/9] bg-black rounded-lg overflow-hidden shadow-2xl cursor-pointer"
+                  initial={false}
+                  animate={{
+                    y,
+                    scale,
+                    transition: {
+                      type: "spring",
+                      stiffness: 250,
+                      damping: 20,
+                      mass: 0.5,
+                    },
+                  }}
+                  style={{
+                    willChange: "opacity, filter, transform",
+                    filter: `blur(${blur}px)`,
+                    opacity,
+                    transitionProperty: "opacity, filter",
+                    transitionDuration: "200ms",
+                    transitionTimingFunction: "ease-in-out",
+                    zIndex: 1000 - card.index,
+                    pointerEvents: offsetIndex === 0 ? "auto" : "none",
+                  }}
+                  onClick={() => handleImageClick(card.imageIndex)}
+                >
+                  {shouldImplementPreloading ? <>{offsetIndex < FRAMES_VISIBLE_LENGTH ? image : null}</> : image}
+                  {/* Text overlay - only show on front card */}
+                  {offsetIndex === 0 && (
+                    <div className="absolute inset-0 flex flex-col items-center justify-end bg-gradient-to-t from-black/90 via-black/50 to-transparent p-4 pb-6 md:pb-8 text-center pointer-events-none">
+                      <h3 className="text-white text-base md:text-xl font-semibold mb-1 md:mb-2">{imageData.title}</h3>
+                      <p className="text-gray-300 text-xs md:text-sm line-clamp-2">{imageData.description}</p>
+                    </div>
+                  )}
+                </motion.div>
+              )
+            })}
+          </div>
         </div>
-      </div>
-      {selectedImageIndex !== null && (
+      )}
+
+      {activeSelected && (
         <ImageDetailPopover
           isOpen={isPopoverOpen}
           onClose={handleClosePopover}
           images={[
-            images[selectedImageIndex].url,
-            ...images[selectedImageIndex].additionalImages
+            activeSelected.url,
+            ...activeSelected.additionalImages
           ]}
-          title={images[selectedImageIndex].title}
-          description={images[selectedImageIndex].description}
-          prompt={images[selectedImageIndex].prompt}
+          id={activeSelected.id}
+          title={activeSelected.title}
+          description={activeSelected.description}
+          prompt={activeSelected.prompt}
+          author_name={activeSelected.author_name}
+          author_link={activeSelected.author_link}
         />
       )}
+
+      {/* Submit Prompt Modal */}
+      <SubmitPromptModal
+        isOpen={isSubmitOpen}
+        onClose={handleModalClose}
+        onSuccess={handleModalSuccess}
+      />
     </>
   )
 }

@@ -1,0 +1,16 @@
+/* TEAM */
+  Developer & Creator: Nabil Thange
+  Portfolio: https://nabil-thange.vercel.app/
+  Blog: https://nabil-thange.vercel.app/blog
+  GitHub: https://github.com/NabilThange
+  Location: India
+
+/* SITE */
+  Last update: 2026/07/22
+  Standards: HTML5, CSS3, TypeScript, React 19, Next.js 16 (App Router)
+  Components: Tailwind CSS, Radix UI, Framer Motion, Lucide Icons
+  Database & Storage: Supabase REST API & Storage
+  Software: Visual Studio Code, Antigravity AI
+  Open Source Repos: 
+    - https://github.com/NabilThange/AwesomeLM-Skill
+    - https://github.com/NabilThange/AwesomeLM-Extension

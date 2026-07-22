@@ -1,0 +1,76 @@
+# AwesomeLM Full Technical Documentation & LLM Knowledge Corpus
+
+> Complete reference manual for AwesomeLM: Generative AI presentation prompting, Google NotebookLM workflows, slide layout mechanics, prompt moderation policies, and author bio.
+
+---
+
+## 1. Executive Summary & Core Philosophy
+
+AwesomeLM (https://awesomelm.app) was conceived by developer Nabil Thange (https://nabil-thange.vercel.app/) to address the inefficiency of modern presentation design. 
+
+Traditional presentation creation suffers from two major friction points:
+1. **The Blank Slide Syndrome**: Users spend hours staring at white canvases trying to decide how to structure complex ideas.
+2. **Template Trap**: Downloadable slide templates force users to rewrite content to fit rigid aesthetic boxes, leading to generic, ineffective presentations.
+
+AwesomeLM replaces static templates with **Visual Prompt Blueprints**. These prompts provide structured natural language constraints for Large Language Models (LLMs) like GPT-4o, Claude 3.5 Sonnet, and Google NotebookLM to transform raw text, PDFs, or research notes into clear visual presentation structures.
+
+---
+
+## 2. Presentation Design & Visual Layout Principles
+
+When LLMs generate visual slide prompts, AwesomeLM enforces five foundational design rules:
+
+### A. The Signal-to-Noise Ratio (Rule of One)
+Each slide must communicate **one single core concept**. If a slide contains more than three major points, it must be split across multiple sequential slides.
+
+### B. Visual Hierarchy & Contrast
+- **Headline**: Action-oriented statement (not just "Q3 Sales", but "Q3 Revenue Grew 42% Driven by Enterprise Subscriptions").
+- **Body Content**: Supporting evidence, data visualizations, or comparison columns.
+- **Micro-Copy**: Annotations, source citations, or speaker prompts.
+
+### C. Diagrammatic Architecture
+Instead of wall-of-text bullet points, AwesomeLM prompts enforce structural diagrams:
+- **Comparison Grid**: 2x2 or 3x2 matrix comparing options or trade-offs.
+- **Process Flow**: Step-by-step horizontal chevron timelines.
+- **Hub-and-Spoke**: Central thesis with radiating supporting pillars.
+- **Metrics Dashboard**: Large numeric callouts with contextual labels.
+
+---
+
+## 3. Google NotebookLM Integration Workflow
+
+Google NotebookLM is designed for document synthesis and audio overview generation. AwesomeLM optimizes the visual output phase of NotebookLM:
+
+1. **Ingest Sources**: Upload PDFs, Google Docs, or text files into a NotebookLM notebook.
+2. **Synthesize Key Takeaways**: Ask NotebookLM to identify the core narrative arc.
+3. **Apply AwesomeLM Visual Prompt**: Copy a prompt from https://awesomelm.app/treasure and paste it into NotebookLM's chat interface.
+4. **Export & Render**: Copy the structured markdown slide outline into Google Slides, PowerPoint, or AI deck builders.
+
+---
+
+## 4. Creator Profile & Link Knowledge Graph
+
+- **Creator**: Nabil Thange
+- **Portfolio**: https://nabil-thange.vercel.app/
+- **Technical Blog**: https://nabil-thange.vercel.app/blog
+- **Web App**: https://awesomelm.app/
+- **Open Source Agent Skill**: https://github.com/NabilThange/AwesomeLM-Skill
+- **Open Source Extension**: https://github.com/NabilThange/AwesomeLM-Extension
+
+### Community Moderation & Safety Policy
+All prompts submitted to AwesomeLM are 100% free and open. Every community submission is checked for:
+- **Safety**: Zero toxic, discriminatory, or harmful content.
+- **Fidelity**: Validated to produce clear, structured outputs in ChatGPT, Claude, and NotebookLM.
+- **No Paywalls**: All features, prompts, and extensions remain completely free for creators worldwide.
+
+---
+
+## 5. Site Map & Complete Resource Index
+
+- Main Platform: https://awesomelm.app/
+- Prompt Gallery: https://awesomelm.app/treasure
+- Native Technical Blog: https://awesomelm.app/blog
+- RSS 2.0 Feed: https://awesomelm.app/feed.xml
+- Humans File: https://awesomelm.app/humans.txt
+- Robots File: https://awesomelm.app/robots.txt
+- Sitemap: https://awesomelm.app/sitemap.xml

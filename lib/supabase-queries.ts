@@ -38,7 +38,10 @@ function transformToImageData(treasure: Treasure): ImageData {
     prompt: treasure.prompt,
     additionalImages: optimizedAdditionalImages,
     tags: treasure.tags || [],
-    category: treasure.category
+    category: treasure.category,
+    author_name: treasure.metadata?.author_name || 'Nabil',
+    author_link: treasure.metadata?.author_link || 'https://nabil-thange.vercel.app/',
+    metadata: treasure.metadata || {}
   }
 }
 
@@ -55,14 +58,15 @@ export async function fetchTreasures(): Promise<ImageData[]> {
       return []
     }
 
-    // Fetch treasures from Supabase REST API
-    const response = await fetch(`${supabaseUrl}/rest/v1/treasures?select=*&order=created_at.desc`, {
+    // Fetch treasures from Supabase REST API with 60-second ISR cache revalidation
+    const selectFields = 'id,title,description,prompt,main_image_url,additional_images,category,tags,created_at,metadata'
+    const response = await fetch(`${supabaseUrl}/rest/v1/treasures?select=${selectFields}&order=created_at.desc`, {
       headers: {
         'apikey': supabaseKey,
         'Authorization': `Bearer ${supabaseKey}`,
         'Content-Type': 'application/json'
       },
-      cache: 'no-store' // Ensure fresh data
+      next: { revalidate: 60, tags: ['treasures'] }
     })
 
     if (!response.ok) {
@@ -90,14 +94,15 @@ export async function fetchFeaturedTreasures(): Promise<ImageData[]> {
       return []
     }
 
-    // Fetch only featured treasures from Supabase
-    const response = await fetch(`${supabaseUrl}/rest/v1/treasures?select=*&is_featured=eq.true&order=created_at.desc`, {
+    // Fetch only featured treasures from Supabase with 60-second ISR cache
+    const selectFields = 'id,title,description,prompt,main_image_url,additional_images,category,tags,created_at,metadata'
+    const response = await fetch(`${supabaseUrl}/rest/v1/treasures?select=${selectFields}&is_featured=eq.true&order=created_at.desc`, {
       headers: {
         'apikey': supabaseKey,
         'Authorization': `Bearer ${supabaseKey}`,
         'Content-Type': 'application/json'
       },
-      cache: 'no-store'
+      next: { revalidate: 60, tags: ['featured-treasures'] }
     })
 
     if (!response.ok) {

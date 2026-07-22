@@ -23,4 +23,8 @@ export interface ImageData {
   additionalImages: string[]
   tags: string[]
   category: string | null
+  author_name?: string
+  author_link?: string
+  metadata?: Record<string, any>
 }
+

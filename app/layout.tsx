@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils"
 import { V0Provider } from "@/lib/context"
 import dynamic from "next/dynamic"
 import { TreasurePreloader } from "@/components/treasure/treasure-preloader"
+import { Footer } from "@/components/shared/footer"
 
 const V0Setup = dynamic(() => import("@/components/v0-setup"))
 
@@ -98,6 +99,37 @@ export const metadata: Metadata = {
   },
 }
 
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://awesomelm.app/#website",
+      "url": "https://awesomelm.app/",
+      "name": "AwesomeLM",
+      "description": "AwesomeLM transforms brilliant thoughts into brilliant slides instantly using curated AI presentation prompts.",
+      "publisher": {
+        "@type": "Person",
+        "name": "Nabil Thange",
+        "url": "https://nabil-thange.vercel.app/",
+        "sameAs": ["https://nabil-thange.vercel.app/blog"]
+      }
+    },
+    {
+      "@type": "Person",
+      "@id": "https://nabil-thange.vercel.app/#person",
+      "name": "Nabil Thange",
+      "url": "https://nabil-thange.vercel.app/",
+      "sameAs": [
+        "https://nabil-thange.vercel.app/blog",
+        "https://github.com/NabilThange"
+      ],
+      "jobTitle": "Software Developer & Creator",
+      "knowsAbout": ["Web Optimization", "AI Prompts", "Next.js", "React", "Presentation Design"]
+    }
+  ]
+}
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -105,10 +137,17 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      </head>
       <body className={cn(geistSans.variable, geistMono.variable, instrumentSerif.variable, "font-sans antialiased")}>
         <V0Provider isV0={isV0}>
           <TreasurePreloader />
           {children}
+          <Footer />
           {isV0 && <V0Setup />}
           {process.env.NODE_ENV === 'production' && <Analytics />}
         </V0Provider>

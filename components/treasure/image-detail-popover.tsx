@@ -2,7 +2,7 @@
 
 import React, { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { X, Copy, Check, ChevronLeft, ChevronRight } from "lucide-react"
+import { X, Copy, Check, ChevronLeft, ChevronRight, ExternalLink, User } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
 interface ImageDetailPopoverProps {
@@ -12,6 +12,9 @@ interface ImageDetailPopoverProps {
   title: string
   description: string
   prompt?: string
+  id?: string
+  author_name?: string
+  author_link?: string
 }
 
 export function ImageDetailPopover({
@@ -21,6 +24,9 @@ export function ImageDetailPopover({
   title,
   description,
   prompt,
+  id,
+  author_name,
+  author_link,
 }: ImageDetailPopoverProps) {
   const [copiedDescription, setCopiedDescription] = useState(false)
   const [copiedPrompt, setCopiedPrompt] = useState(false)
@@ -130,17 +136,28 @@ export function ImageDetailPopover({
             </Button>
 
             {/* Image Section */}
-            <div className="relative w-full h-[250px] md:h-[400px] bg-black flex-shrink-0">
+            <div className="relative w-full h-[250px] md:h-[400px] bg-black flex-shrink-0 overflow-hidden">
               <AnimatePresence mode="wait">
                 <motion.img
                   key={currentImageIndex}
                   src={images[currentImageIndex] || "/404.png"}
                   alt={`${title} - ${currentImageIndex + 1}`}
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover touch-pan-y"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
-                  transition={{ duration: 0.3 }}
+                  transition={{ duration: 0.2 }}
+                  drag={images.length > 1 ? "x" : false}
+                  dragConstraints={{ left: 0, right: 0 }}
+                  dragElastic={0.2}
+                  onDragEnd={(_, info) => {
+                    if (images.length <= 1) return
+                    if (info.offset.x < -40 || info.velocity.x < -300) {
+                      handleNextImage()
+                    } else if (info.offset.x > 40 || info.velocity.x > 300) {
+                      handlePrevImage()
+                    }
+                  }}
                 />
               </AnimatePresence>
 
@@ -195,34 +212,37 @@ export function ImageDetailPopover({
               transition={{ delay: 0.1, duration: 0.2 }}
               className="p-3 sm:p-4 md:p-6 flex flex-col gap-2 sm:gap-3 md:gap-4 overflow-y-auto flex-1 min-h-0"
             >
-              <div className="flex items-center justify-between gap-3">
-                <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900 dark:text-white flex-1">
-                  {title}
-                </h2>
-                {/* <button
-                  className="group flex items-center font-medium text-sm sm:text-base px-3 sm:px-4 py-2 sm:py-2.5 text-white bg-gradient-to-r from-[#0f0c29] via-[#302b63] to-[#24243e] rounded-2xl tracking-wide transition-all hover:shadow-lg flex-shrink-0"
-                  onClick={() => {
-                    // TODO: Add launch functionality
-                    console.log('Launch clicked for:', title)
-                  }}
-                >
-                  <svg
-                    height={20}
-                    width={20}
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="mr-1 sm:mr-2 rotate-[30deg] transition-transform duration-500 ease-[cubic-bezier(0.76,0,0.24,1)] group-hover:translate-x-1 group-hover:rotate-90"
-                  >
-                    <path d="M0 0h24v24H0z" fill="none" />
-                    <path
-                      d="M5 13c0-5.088 2.903-9.436 7-11.182C16.097 3.564 19 7.912 19 13c0 .823-.076 1.626-.22 2.403l1.94 1.832a.5.5 0 0 1 .095.603l-2.495 4.575a.5.5 0 0 1-.793.114l-2.234-2.234a1 1 0 0 0-.707-.293H9.414a1 1 0 0 0-.707.293l-2.234 2.234a.5.5 0 0 1-.793-.114l-2.495-4.575a.5.5 0 0 1 .095-.603l1.94-1.832C5.077 14.626 5 13.823 5 13zm1.476 6.696l.817-.817A3 3 0 0 1 9.414 18h5.172a3 3 0 0 1 2.121.879l.817.817.982-1.8-1.1-1.04a2 2 0 0 1-.593-1.82c.124-.664.187-1.345.187-2.036 0-3.87-1.995-7.3-5-8.96C8.995 5.7 7 9.13 7 13c0 .691.063 1.372.187 2.037a2 2 0 0 1-.593 1.82l-1.1 1.039.982 1.8zM12 13a2 2 0 1 1 0-4 2 2 0 0 1 0 4z"
-                      fill="currentColor"
-                    />
-                  </svg>
-                  <span className="transition-transform duration-500 ease-[cubic-bezier(0.76,0,0.24,1)] group-hover:translate-x-1.5 hidden sm:inline">
-                    FineTune
-                  </span>
-                </button> */}
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div>
+                  <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900 dark:text-white">
+                    {title}
+                  </h2>
+                  <div className="flex items-center gap-2 mt-1">
+                    <span className="inline-flex items-center gap-1 text-xs font-medium text-neutral-300 dark:text-neutral-300 bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 px-2.5 py-0.5 rounded-full">
+                      <User className="w-3 h-3 text-neutral-400" />
+                      By{" "}
+                      <a
+                        href={author_link || "https://nabil-thange.vercel.app/"}
+                        target="_blank"
+                        rel="noopener me"
+                        className="underline hover:text-white flex items-center gap-0.5 ml-0.5"
+                      >
+                        {author_name || "Nabil Thange"}
+                        <ExternalLink className="w-2.5 h-2.5 inline" />
+                      </a>
+                    </span>
+
+                    <a
+                      href="https://nabil-thange.vercel.app/blog"
+                      target="_blank"
+                      rel="noopener me"
+                      className="inline-flex items-center gap-1 text-xs font-medium text-emerald-400 bg-emerald-950/40 border border-emerald-800/50 hover:bg-emerald-900/60 px-2.5 py-0.5 rounded-full transition-colors"
+                    >
+                      <span>Dev Blog</span>
+                      <ExternalLink className="w-2.5 h-2.5 inline opacity-70" />
+                    </a>
+                  </div>
+                </div>
               </div>
 
               <div className="flex flex-col gap-2 sm:gap-3">

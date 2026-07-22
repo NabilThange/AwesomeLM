@@ -5,7 +5,7 @@ import { Slot } from "@radix-ui/react-slot";
 import { cva } from "class-variance-authority";
 
 export const inputVariants = cva(
-  "flex w-full rounded-full transition-[background-color,box-shadow] backdrop-blur-sm duration-200 ease-out bg-primary/20 shadow-sm ring-1 ring-transparent focus-visible:bg-primary/20 focus-visible:ring-1 focus-visible:ring-primary/40 focus-visible:ring-offset-4 focus-visible:ring-offset-black/10 disabled:cursor-not-allowed died:opacity-50 md:text-base text-white border-2 border-white/50 h-11 !text-base placeholder:text-white/80 focus:outline-none px-4",
+  "flex w-full rounded-lg transition-colors backdrop-blur-sm duration-200 ease-out bg-primary/20 shadow-sm border border-white/20 text-white text-sm placeholder:text-white/60 focus:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-neutral-500 disabled:cursor-not-allowed disabled:opacity-50 px-3 py-2",
 );
 
 const Input = React.forwardRef<HTMLInputElement, React.ComponentProps<"input"> & { asChild?: boolean }>(
