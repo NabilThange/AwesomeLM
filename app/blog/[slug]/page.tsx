@@ -3,6 +3,7 @@ import { notFound } from "next/navigation"
 import Link from "next/link"
 import { BLOG_POSTS, getBlogPostBySlug } from "@/lib/blog-data"
 import { renderMarkdownToHtml } from "@/lib/markdown-renderer"
+import { getBaseUrl } from "@/lib/utils"
 import {
   ArrowLeft,
   Calendar,
@@ -32,7 +33,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const post = getBlogPostBySlug(slug)
   if (!post) return {}
 
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://awesomelm.app"
+  const baseUrl = getBaseUrl()
 
   return {
     title: `${post.title} | AwesomeLM Blog`,

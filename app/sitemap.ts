@@ -1,9 +1,10 @@
 import type { MetadataRoute } from 'next'
 import { fetchTreasures } from '@/lib/supabase-queries'
 import { BLOG_POSTS } from '@/lib/blog-data'
+import { getBaseUrl } from '@/lib/utils'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://awesomelm.app'
+  const baseUrl = getBaseUrl()
 
   // Fetch treasures from Supabase
   const treasures = await fetchTreasures()
@@ -49,7 +50,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }))
 
   const treasureRoutes: MetadataRoute.Sitemap = treasures.map((item) => ({
-    url: `${baseUrl}/treasure?id=${item.id}`,
+    url: `${baseUrl}/treasure?id=${encodeURIComponent(item.id)}`,
     lastModified: new Date(),
     changeFrequency: 'weekly',
     priority: 0.7,

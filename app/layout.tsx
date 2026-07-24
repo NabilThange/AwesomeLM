@@ -3,7 +3,7 @@ import type { Metadata } from "next"
 import { Geist, Geist_Mono, Instrument_Serif } from "next/font/google"
 import { Analytics } from '@vercel/analytics/next'
 import "./globals.css"
-import { cn } from "@/lib/utils"
+import { cn, getBaseUrl } from "@/lib/utils"
 import { V0Provider } from "@/lib/context"
 import dynamic from "next/dynamic"
 import { TreasurePreloader } from "@/components/treasure/treasure-preloader"
@@ -31,7 +31,7 @@ const instrumentSerif = Instrument_Serif({
 const isV0 = process.env["VERCEL_URL"]?.includes("vusercontent.net") ?? false
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://awesomelm.app'),
+  metadataBase: new URL(getBaseUrl()),
   title: {
     template: "%s | AwesomeLM",
     default: "AwesomeLM - Power Your Point",

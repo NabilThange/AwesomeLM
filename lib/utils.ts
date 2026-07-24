@@ -5,6 +5,11 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
+export function getBaseUrl(): string {
+  const url = process.env.NEXT_PUBLIC_SITE_URL || 'https://awesomelm.vercel.app'
+  return url.replace(/\/+$/, '')
+}
+
 // Landing project types for server actions
 export type ActionSuccessResult<T> = {
   success: true

@@ -1,7 +1,8 @@
 import { BLOG_POSTS } from "@/lib/blog-data"
+import { getBaseUrl } from "@/lib/utils"
 
 export async function GET() {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://awesomelm.app"
+  const baseUrl = getBaseUrl()
 
   const itemsXml = BLOG_POSTS.map(
     (post) => `
